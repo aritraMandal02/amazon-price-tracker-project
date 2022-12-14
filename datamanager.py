@@ -17,7 +17,7 @@ class Tracker():
         self.url_list = self.csv_data['url']
         if not updatemode:
             warnings.warn(
-                "Warning Me4ssage: Running 'add_product' without setting updatemode = 1. Existing data will not be updated."
+                "Warning Message: Running 'add_product' without setting updatemode = 1. Existing data will not be updated."
             )
         for i in range(len(self.url_list)):
             if url == self.url_list[i]:
@@ -33,16 +33,19 @@ class Tracker():
             i = self.csv_data[self.csv_data['url'] == url].index
             self.csv_data.drop(i, inplace=True)
         self.csv_data.to_csv('products.csv', index=False)
+        return 'deleted specified data'
 
     def update_all(self):
         self.url_list = self.csv_data['url']
         i = 0
         for url in self.url_list:
-            update_params = dict(price=Product(url).prod_price)
+            update_params = Product(url).product_details()
             self.update_data(i, update_params)
             i += 1
         self.csv_data.to_csv('products.csv', index=False)
+        return 'All data up-to-date'
 
     def delete_all(self):
         self.csv_data = self.csv_data[0:0]
         self.csv_data.to_csv('products.csv', index=False)
+        return 'All data deleted'
