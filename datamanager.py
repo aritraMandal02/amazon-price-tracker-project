@@ -1,6 +1,7 @@
 import pandas as pd
 from product import Product
 import warnings
+import concurrent.futures as cf
 
 
 class Tracker():
@@ -36,10 +37,13 @@ class Tracker():
         return 'deleted specified data'
 
     def update_all(self):
+        self.csv_data = pd.read_csv('products.csv')
         self.url_list = self.csv_data['url']
+        with cf.ThreadPoolExecutor() as executor:
+            products = executor.map(Product, self.url_list)
         i = 0
-        for url in self.url_list:
-            update_params = Product(url).product_details()
+        for product in products:
+            update_params = product.product_details()
             self.update_data(i, update_params)
             i += 1
         self.csv_data.to_csv('products.csv', index=False)
