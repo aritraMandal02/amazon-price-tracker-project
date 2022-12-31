@@ -17,9 +17,7 @@ class Tracker():
         url = product.prod_url
         self.url_list = self.csv_data['url']
         if not updatemode:
-            warnings.warn(
-                "Warning Message: Running 'add_product' without setting updatemode = 1. Existing data will not be updated."
-            )
+               print("Warning Message: Running 'add_product' without setting updatemode = 1. Existing data will not be updated.")
         for i in range(len(self.url_list)):
             if url == self.url_list[i]:
                 if updatemode:
